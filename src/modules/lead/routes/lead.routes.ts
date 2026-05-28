@@ -1,7 +1,12 @@
 import { Router } from "express";
 
 import { validateRequest } from "../../../shared/middleware/validateRequest.js";
-import { analyzeLeadsController } from "../controllers/lead.controller.js";
+import {
+  analyzeLeadsController,
+  getLeadController,
+  getLeadSummaryController
+} from "../controllers/lead.controller.js";
+import { leadPhoneParamsSchema } from "../validators/leadQuery.validator.js";
 import { analyzeLeadsRequestSchema } from "../validators/lead.validator.js";
 
 export const leadRouter = Router();
@@ -12,4 +17,12 @@ leadRouter.post(
   "/analyze",
   validateRequest({ body: analyzeLeadsRequestSchema }),
   analyzeLeadsController
+);
+
+leadRouter.get("/leadSummary", getLeadSummaryController);
+
+leadRouter.get(
+  "/lead/:phone",
+  validateRequest({ params: leadPhoneParamsSchema }),
+  getLeadController
 );

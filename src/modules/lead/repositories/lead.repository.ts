@@ -9,9 +9,17 @@ export type PersistInquiryResult = {
   created: boolean;
 };
 
-export interface LeadProfileRepository {
+export interface LeadProfileWriteRepository {
   upsertInquiry(lead: NormalizedLead): Promise<PersistInquiryResult>;
 }
+
+export interface LeadProfileReadRepository {
+  findByNormalizedPhone(phone: string): Promise<LeadProfile | null>;
+  findAll(): Promise<LeadProfile[]>;
+}
+
+export type LeadProfileRepository = LeadProfileWriteRepository &
+  LeadProfileReadRepository;
 
 const uniqueValues = <TValue extends string>(values: TValue[]): TValue[] => [
   ...new Set(values)
@@ -71,6 +79,18 @@ const toLeadProfile = (document: LeadProfileDocument): LeadProfile => ({
 });
 
 export class MongoLeadProfileRepository implements LeadProfileRepository {
+  public async findByNormalizedPhone(phone: string): Promise<LeadProfile | null> {
+    const profile = await LeadProfileModel.findOne({ phone }).exec();
+
+    return profile ? toLeadProfile(profile) : null;
+  }
+
+  public async findAll(): Promise<LeadProfile[]> {
+    const profiles = await LeadProfileModel.find().exec();
+
+    return profiles.map(toLeadProfile);
+  }
+
   public async upsertInquiry(lead: NormalizedLead): Promise<PersistInquiryResult> {
     const existingProfile = await LeadProfileModel.findOne({ phone: lead.phone }).exec();
 

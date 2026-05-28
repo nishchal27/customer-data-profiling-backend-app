@@ -14,11 +14,11 @@ import type {
 } from "../types/lead.types.js";
 import {
   leadProfileRepository,
-  type LeadProfileRepository
+  type LeadProfileWriteRepository
 } from "../repositories/lead.repository.js";
 
 export class LeadIngestionService {
-  public constructor(private readonly repository: LeadProfileRepository) {}
+  public constructor(private readonly repository: LeadProfileWriteRepository) {}
 
   public async ingestLeads(input: AnalyzeLeadsInput): Promise<LeadIngestionResult> {
     logger.info({ received: input.leads.length }, "Lead ingestion started");
