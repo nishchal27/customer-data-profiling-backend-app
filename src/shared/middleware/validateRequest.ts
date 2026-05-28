@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import type { ZodSchema } from "zod";
 
+import { logger } from "../logger/logger.js";
 import { parseWithSchema, type ValidationTarget } from "../utils/validation.js";
 
 type RequestValidationSchemas = Partial<Record<ValidationTarget, ZodSchema<unknown>>>;
@@ -31,6 +32,7 @@ export const validateRequest =
 
       next();
     } catch (error) {
+      logger.warn({ error, path: request.path }, "Request validation failed");
       next(error);
     }
   };
