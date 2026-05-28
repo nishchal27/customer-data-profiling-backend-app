@@ -36,6 +36,19 @@ npm run dev
 
 Open Swagger at `http://localhost:3000/docs`.
 
+Interactive API documentation is available through Swagger UI.
+After starting the server:
+http://localhost:5000/docs
+
+Overall API Overview
+![Swagger Overview](./public/screenshot/swagger-overall.png)
+
+Lead Ingestion Endpoint
+![Swagger POST Analyze](./public/screenshot/swagger-post.png)
+
+Health & System APIs
+![Swagger System APIs](./public/screenshot/swagger%20system.png)
+
 ## Scripts
 
 | Command             | Purpose                                 |
