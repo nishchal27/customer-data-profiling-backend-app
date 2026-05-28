@@ -27,7 +27,7 @@ export const createApp = (): express.Express => {
     app.use("/docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
   }
 
-  app.get("/health", (_request, response) => {
+  app.get(`${config.apiPrefix}/health`, (_request, response) => {
     response.status(httpStatus.OK).json(
       successResponse("Service is healthy", {
         service: "lead-profiling-api",
@@ -38,7 +38,7 @@ export const createApp = (): express.Express => {
     );
   });
 
-  app.use(leadRouter);
+  app.use(config.apiPrefix, leadRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

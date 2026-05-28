@@ -19,7 +19,7 @@ type HealthResponseBody = {
 
 describe("GET /health", () => {
   it("returns service health using the standard response shape", async () => {
-    const response = await request(app).get("/health").expect(200);
+    const response = await request(app).get("/api/v1/health").expect(200);
     const responseBody = response.body as HealthResponseBody;
 
     expect(responseBody.success).toBe(true);

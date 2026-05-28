@@ -5,7 +5,7 @@ import { app } from "../app.js";
 
 describe("GET /lead/:phone validation", () => {
   it("rejects malformed phone lookups before repository access", async () => {
-    const response = await request(app).get("/lead/123").expect(400);
+    const response = await request(app).get("/api/v1/lead/123").expect(400);
     const responseBody = response.body as {
       success: boolean;
       message: string;
