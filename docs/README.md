@@ -1,6 +1,6 @@
 # Real Estate Lead Profiling Backend
 
-This repository contains the backend foundation for a production-oriented customer lead profiling system. Phase 1 adds the lead ingestion pipeline while keeping analytics and read APIs deferred to later phases.
+This repository contains the backend foundation for a production-oriented customer lead profiling system. Phase 2 adds profile retrieval and analytics summaries on top of the ingestion pipeline.
 
 ## Tech Stack
 
@@ -38,7 +38,7 @@ docker compose up -d mongo
 npm run dev
 ```
 
-The health endpoint is available at `GET /health`. Lead ingestion is available at `POST /analyze`. Swagger UI is available at `/docs` when `SWAGGER_ENABLED=true`.
+The health endpoint is available at `GET /health`. Lead ingestion is available at `POST /analyze`, profile retrieval at `GET /lead/:phone`, and analytics at `GET /leadSummary`. Swagger UI is available at `/docs` when `SWAGGER_ENABLED=true`.
 
 ## Scripts
 
@@ -83,7 +83,7 @@ Shared infrastructure lives under `src/shared`:
 - `utils` - response and validation helpers
 - `constants` - reusable constants such as HTTP status codes
 
-The `src/modules/lead` folder contains the Phase 1 ingestion pipeline. Routes validate HTTP payloads, controllers handle responses, services normalize and merge customer data, and repositories isolate MongoDB access.
+The `src/modules/lead` folder contains the ingestion, retrieval, and analytics pipeline. Routes validate HTTP payloads, controllers handle responses, services normalize and merge customer data, analytics services calculate reporting views, and repositories isolate MongoDB access.
 
 ## Lead Ingestion
 
@@ -91,7 +91,23 @@ The `src/modules/lead` folder contains the Phase 1 ingestion pipeline. Routes va
 
 Phone number is the primary customer identity. During ingestion the service normalizes phone numbers, email casing, budget values, locations, and inquiry dates. Existing customers are updated by appending inquiry history to the same `LeadProfile` document instead of creating duplicate customer documents.
 
-Analytics endpoints are intentionally not implemented in this phase.
+## Retrieval
+
+`GET /lead/:phone` retrieves a normalized customer profile by phone number. Lookup values are normalized before querying, so formatted values such as `(123) 456-70001` can match the stored canonical phone `+12345670001`.
+
+The response includes customer details, inquiry history, and a per-customer summary with total inquiries, latest inquiry date, lead type breakdown, normalized locations, and budget overview.
+
+## Analytics
+
+`GET /leadSummary` returns lightweight CRM-style analytics across all normalized lead profiles:
+
+- total customers and total inquiries
+- sale vs rental distribution
+- average budget by lead type
+- monthly inquiry frequency trends
+- unique location count and most common locations
+
+Analytics intentionally run in the service layer over normalized repository results. This keeps the assignment implementation readable and easy to test. For larger production datasets, the repository boundary allows the same calculations to move into MongoDB aggregation pipelines without changing controller contracts.
 
 ## Docker
 

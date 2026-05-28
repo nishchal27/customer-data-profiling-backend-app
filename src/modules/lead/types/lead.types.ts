@@ -76,3 +76,37 @@ export type LeadIngestionResult = {
     status: "created" | "updated";
   }>;
 };
+
+export type LeadTypeBreakdown = Record<LeadType, number>;
+
+export type BudgetOverview = {
+  min: number | null;
+  max: number | null;
+  average: number | null;
+};
+
+export type LeadProfileResponse = {
+  customer: {
+    name: string;
+    phone: string;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  inquiryHistory: Array<{
+    sourceLeadId: string;
+    leadType: LeadType;
+    preferredPropertyType: PreferredPropertyType;
+    budget: number;
+    location: string;
+    contactDate: string;
+    inquiryNotes?: string;
+  }>;
+  summary: {
+    totalInquiries: number;
+    latestInquiryDate: string | null;
+    leadTypeBreakdown: LeadTypeBreakdown;
+    normalizedLocations: string[];
+    budgetOverview: BudgetOverview;
+  };
+};

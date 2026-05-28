@@ -110,6 +110,68 @@ export const openApiDocument: OpenAPIV3.Document = {
         }
       }
     },
+    "/lead/{phone}": {
+      get: {
+        tags: ["Leads"],
+        summary: "Retrieve a normalized customer lead profile",
+        description:
+          "Looks up a customer by normalized phone number and returns customer details, inquiry history, and per-customer summary metrics.",
+        parameters: [
+          {
+            name: "phone",
+            in: "path",
+            required: true,
+            schema: { type: "string", example: "+12345670001" },
+            description:
+              "Phone number lookup value. Punctuation is normalized before searching."
+          }
+        ],
+        responses: {
+          "200": {
+            description: "Lead profile retrieved.",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/LeadProfileResponse" }
+              }
+            }
+          },
+          "400": {
+            description: "Malformed phone parameter.",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            description: "No profile exists for the normalized phone number.",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/leadSummary": {
+      get: {
+        tags: ["Analytics"],
+        summary: "Generate lead summary analytics",
+        description:
+          "Returns assignment bonus metrics including customer counts, inquiry counts, lead type distribution, average budgets, monthly inquiry trends, and top locations.",
+        responses: {
+          "200": {
+            description: "Lead summary generated.",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/LeadSummaryResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       get: {
         tags: ["System"],
@@ -222,6 +284,160 @@ export const openApiDocument: OpenAPIV3.Document = {
                       type: "string",
                       enum: ["created", "updated"],
                       example: "updated"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      LeadProfileResponse: {
+        type: "object",
+        properties: {
+          success: { type: "boolean", example: true },
+          message: { type: "string", example: "Lead profile retrieved" },
+          data: {
+            type: "object",
+            properties: {
+              customer: {
+                type: "object",
+                properties: {
+                  name: { type: "string", example: "John Doe" },
+                  phone: { type: "string", example: "+12345670001" },
+                  email: { type: "string", example: "johndoe1@example.com" },
+                  createdAt: {
+                    type: "string",
+                    format: "date-time",
+                    example: "2024-01-05T00:00:00.000Z"
+                  },
+                  updatedAt: {
+                    type: "string",
+                    format: "date-time",
+                    example: "2024-02-01T00:00:00.000Z"
+                  }
+                }
+              },
+              inquiryHistory: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    sourceLeadId: { type: "string", example: "1" },
+                    leadType: {
+                      type: "string",
+                      enum: ["rental", "sale"],
+                      example: "sale"
+                    },
+                    preferredPropertyType: {
+                      type: "string",
+                      enum: ["apartment", "house", "condo", "townhouse"],
+                      example: "house"
+                    },
+                    budget: { type: "number", example: 300000 },
+                    location: { type: "string", example: "Los Angeles" },
+                    contactDate: {
+                      type: "string",
+                      format: "date-time",
+                      example: "2024-01-05T00:00:00.000Z"
+                    },
+                    inquiryNotes: {
+                      type: "string",
+                      example: "Looking for a quiet neighborhood."
+                    }
+                  }
+                }
+              },
+              summary: {
+                type: "object",
+                properties: {
+                  totalInquiries: { type: "number", example: 2 },
+                  latestInquiryDate: {
+                    type: "string",
+                    nullable: true,
+                    example: "2024-02-01T00:00:00.000Z"
+                  },
+                  leadTypeBreakdown: {
+                    type: "object",
+                    properties: {
+                      rental: { type: "number", example: 1 },
+                      sale: { type: "number", example: 1 }
+                    }
+                  },
+                  normalizedLocations: {
+                    type: "array",
+                    items: { type: "string" },
+                    example: ["Los Angeles"]
+                  },
+                  budgetOverview: {
+                    type: "object",
+                    properties: {
+                      min: { type: "number", nullable: true, example: 1200 },
+                      max: { type: "number", nullable: true, example: 300000 },
+                      average: {
+                        type: "number",
+                        nullable: true,
+                        example: 150600
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      LeadSummaryResponse: {
+        type: "object",
+        properties: {
+          success: { type: "boolean", example: true },
+          message: { type: "string", example: "Lead summary generated" },
+          data: {
+            type: "object",
+            properties: {
+              leadCounts: {
+                type: "object",
+                properties: {
+                  totalCustomers: { type: "number", example: 46 },
+                  totalInquiries: { type: "number", example: 48 }
+                }
+              },
+              leadTypeDistribution: {
+                type: "object",
+                properties: {
+                  rental: { type: "number", example: 22 },
+                  sale: { type: "number", example: 26 }
+                }
+              },
+              averageBudgetByLeadType: {
+                type: "object",
+                properties: {
+                  rental: { type: "number", nullable: true, example: 1800 },
+                  sale: { type: "number", nullable: true, example: 450000 }
+                }
+              },
+              inquiryTrends: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    period: { type: "string", example: "2024-01" },
+                    count: { type: "number", example: 24 }
+                  }
+                }
+              },
+              locationAnalytics: {
+                type: "object",
+                properties: {
+                  uniqueLocationCount: { type: "number", example: 18 },
+                  topLocations: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        location: { type: "string", example: "Los Angeles" },
+                        inquiryCount: { type: "number", example: 4 }
+                      }
                     }
                   }
                 }

@@ -7,11 +7,11 @@ import type {
 } from "../modules/lead/types/lead.types.js";
 import { LeadIngestionService } from "../modules/lead/services/lead.service.js";
 import type {
-  LeadProfileRepository,
+  LeadProfileWriteRepository,
   PersistInquiryResult
 } from "../modules/lead/repositories/lead.repository.js";
 
-class InMemoryLeadProfileRepository implements LeadProfileRepository {
+class InMemoryLeadProfileRepository implements LeadProfileWriteRepository {
   private readonly profiles = new Map<string, LeadProfile>();
 
   public upsertInquiry(lead: NormalizedLead): Promise<PersistInquiryResult> {
