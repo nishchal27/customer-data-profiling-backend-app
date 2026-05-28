@@ -51,16 +51,16 @@ Health & System APIs
 
 ## Scripts
 
-| Command             | Purpose                                 |
-| ------------------- | --------------------------------------- |
-| `npm run dev`       | Run the API in TypeScript watch mode    |
-| `npm run build`     | Compile TypeScript                      |
-| `npm start`         | Run the compiled server                 |
+| Command             | Purpose                              |
+| ------------------- | ------------------------------------ |
+| `npm run dev`       | Run the API in TypeScript watch mode |
+| `npm run build`     | Compile TypeScript                   |
+| `npm start`         | Run the compiled server              |
 | `npm run seed`      | Reset and import project sample data |
-| `npm run lint`      | Run ESLint                              |
-| `npm run format`    | Check Prettier formatting               |
-| `npm run typecheck` | Run TypeScript checks without emit      |
-| `npm test`          | Run Vitest tests                        |
+| `npm run lint`      | Run ESLint                           |
+| `npm run format`    | Check Prettier formatting            |
+| `npm run typecheck` | Run TypeScript checks without emit   |
+| `npm test`          | Run Vitest tests                     |
 
 ## Environment
 
