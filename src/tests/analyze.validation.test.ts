@@ -6,7 +6,7 @@ import { app } from "../app.js";
 describe("POST /analyze validation", () => {
   it("returns a clean API error before persistence for invalid payloads", async () => {
     const response = await request(app)
-      .post("/analyze")
+      .post("/api/v1/analyze")
       .send([
         {
           lead_id: 1,
