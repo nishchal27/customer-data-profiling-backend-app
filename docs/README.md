@@ -1,6 +1,6 @@
 # Real Estate Lead Profiling Backend
 
-This repository contains the backend foundation for a production-oriented customer lead profiling system. Phase 0 establishes the service architecture, runtime tooling, validation boundaries, observability, and CI/CD baseline. Lead import, duplicate handling, analytics, and profile retrieval endpoints are intentionally deferred to later phases.
+This repository contains the backend foundation for a production-oriented customer lead profiling system. Phase 1 adds the lead ingestion pipeline while keeping analytics and read APIs deferred to later phases.
 
 ## Tech Stack
 
@@ -38,7 +38,7 @@ docker compose up -d mongo
 npm run dev
 ```
 
-The health endpoint is available at `GET /health`. Swagger UI is available at `/docs` when `SWAGGER_ENABLED=true`.
+The health endpoint is available at `GET /health`. Lead ingestion is available at `POST /analyze`. Swagger UI is available at `/docs` when `SWAGGER_ENABLED=true`.
 
 ## Scripts
 
@@ -83,7 +83,15 @@ Shared infrastructure lives under `src/shared`:
 - `utils` - response and validation helpers
 - `constants` - reusable constants such as HTTP status codes
 
-The `src/modules/lead` folder is prepared for upcoming phases without implementing lead business behavior in Phase 0.
+The `src/modules/lead` folder contains the Phase 1 ingestion pipeline. Routes validate HTTP payloads, controllers handle responses, services normalize and merge customer data, and repositories isolate MongoDB access.
+
+## Lead Ingestion
+
+`POST /analyze` accepts either the assignment sample shape, a raw array of lead inquiries, or an object envelope with a `leads` array.
+
+Phone number is the primary customer identity. During ingestion the service normalizes phone numbers, email casing, budget values, locations, and inquiry dates. Existing customers are updated by appending inquiry history to the same `LeadProfile` document instead of creating duplicate customer documents.
+
+Analytics endpoints are intentionally not implemented in this phase.
 
 ## Docker
 

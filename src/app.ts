@@ -4,6 +4,7 @@ import helmet from "helmet";
 import swaggerUi from "swagger-ui-express";
 
 import { openApiDocument } from "./docs/openApi.js";
+import { leadRouter } from "./modules/lead/routes/lead.routes.js";
 import { config } from "./shared/config/environment.js";
 import { getDatabaseHealth } from "./shared/config/database.js";
 import { httpStatus } from "./shared/constants/httpStatus.js";
@@ -36,6 +37,8 @@ export const createApp = (): express.Express => {
       })
     );
   });
+
+  app.use(leadRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

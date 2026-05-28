@@ -8,7 +8,9 @@ import { logger } from "../logger/logger.js";
 import { errorResponse } from "../utils/apiResponse.js";
 import { formatZodIssues } from "../utils/validation.js";
 
-export const errorHandler: ErrorRequestHandler = (error, request, response) => {
+export const errorHandler: ErrorRequestHandler = (error, request, response, next) => {
+  void next;
+
   if (error instanceof ZodError) {
     response
       .status(httpStatus.BAD_REQUEST)
