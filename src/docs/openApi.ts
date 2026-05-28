@@ -49,7 +49,7 @@ export const openApiDocument: OpenAPIV3.Document = {
               },
               examples: {
                 sampleArray: {
-                  summary: "Assignment sample shape",
+                  summary: "project sample shape",
                   value: [
                     {
                       lead_id: 1,
@@ -159,7 +159,7 @@ export const openApiDocument: OpenAPIV3.Document = {
         tags: ["Analytics"],
         summary: "Generate lead summary analytics",
         description:
-          "Returns assignment bonus metrics including customer counts, inquiry counts, lead type distribution, average budgets, monthly inquiry trends, and top locations.",
+          "Returns project bonus metrics including customer counts, inquiry counts, lead type distribution, average budgets, monthly inquiry trends, and top locations.",
         responses: {
           "200": {
             description: "Lead summary generated.",

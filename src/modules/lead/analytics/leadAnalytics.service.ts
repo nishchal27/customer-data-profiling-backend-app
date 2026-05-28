@@ -20,7 +20,7 @@ export class LeadAnalyticsService {
     const profiles = await this.repository.findAll();
     const inquiries = flattenInquiries(profiles);
 
-    // For the assignment-sized dataset, service-level aggregation is easier to
+    // For the project-sized dataset, service-level aggregation is easier to
     // review and test than a dense Mongo pipeline. The repository boundary keeps
     // the option open to move these calculations into MongoDB when data volume
     // justifies it.

@@ -14,7 +14,7 @@ export const normalizeEmail = (email: string): string => email.trim().toLowerCas
 export const normalizePhoneNumber = (phone: string): string => {
   const digits = phone.replace(/\D/g, "");
 
-  // The assignment data already includes country codes. We keep a single canonical
+  // The project data already includes country codes. We keep a single canonical
   // storage shape so duplicate detection does not depend on punctuation or spaces.
   return digits.length > 0 ? `+${digits}` : "";
 };
