@@ -1,5 +1,9 @@
 # Seed Data
 
-This folder is reserved for seed scripts and transformed fixtures used by later phases.
+Run the project sample import with:
 
-The assignment sample payload currently lives at `docs/data/sample_lead_data.json`. Phase 0 does not import or transform that data yet.
+```bash
+npm run seed
+```
+
+The seed script reads `docs/data/sample_lead_data.json`, validates it with the same Zod schema used by `POST /analyze`, clears existing `LeadProfile` documents, and ingests through the real service layer. Clearing first keeps local reviewer runs deterministic and avoids appending the same sample inquiries repeatedly.

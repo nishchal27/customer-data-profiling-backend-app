@@ -97,7 +97,7 @@ const normalizedLeadInputSchema = leadInputSchema.transform((lead) => ({
   inquiryNotes: lead.inquiry_notes
 }));
 
-// The assignment sample posts a raw JSON array. Preprocessing it into the same
+// The project sample posts a raw JSON array. Preprocessing it into the same
 // envelope used by API clients keeps downstream code simple and preserves
 // field-level validation paths such as leads.0.email.
 export const analyzeLeadsRequestSchema = z.preprocess(

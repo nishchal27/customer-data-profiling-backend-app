@@ -54,7 +54,7 @@ const leadProfileSchema = new Schema(
   }
 );
 
-// Phone is the deterministic merge key for this assignment. The unique index
+// Phone is the deterministic merge key for this project. The unique index
 // protects the repository from creating fragmented customer profiles under load.
 leadProfileSchema.index({ phone: 1 }, { unique: true });
 leadProfileSchema.index({ "metadata.lastInquiryAt": -1 });
